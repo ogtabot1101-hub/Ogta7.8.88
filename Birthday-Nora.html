@@ -11,7 +11,7 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Poppins',system-ui,sans-serif;color:var(--ink);min-height:100dvh;overflow-x:hidden;background:linear-gradient(160deg,#fff6ee,#ffe3ec 58%,#ffd1de) fixed}
 canvas{display:block}
-#dusk{position:fixed;inset:0;z-index:0;opacity:0;transition:opacity 1s;pointer-events:none;background:radial-gradient(120% 90% at 50% 100%,#5a2250 0%,#2a1030 55%,#140818 100%)}
+#dusk{--glow:0;position:fixed;inset:0;z-index:0;opacity:0;transition:opacity 1.1s;pointer-events:none;background:radial-gradient(85% 65% at 50% 48%,rgba(231,176,74,calc(.08 + var(--glow)*.24)) 0%,rgba(138,42,82,calc(.28 + var(--glow)*.16)) 45%,transparent 75%),radial-gradient(130% 100% at 50% 100%,#4a1b34 0%,#260e1c 58%,#14060e 100%)}
 body.dusk #dusk{opacity:1}
 #fx{position:fixed;inset:0;width:100%;height:100%;z-index:30;pointer-events:none}
 .screen{display:none;position:relative;z-index:2;min-height:100dvh;padding:calc(28px + env(safe-area-inset-top)) 20px calc(32px + env(safe-area-inset-bottom));flex-direction:column;align-items:center;justify-content:center;text-align:center}
@@ -71,9 +71,11 @@ h2{font-size:36px}
 #hitMsg:empty{visibility:hidden}
 #hitMsg.pop{animation:pop .5s both}
 @keyframes pop{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.07)}100%{transform:none;opacity:1}}
-#s3 h2{color:#fff1f4}#s3 .lead{color:#d9c8ff}
-#s3 .btn.ghost{background:rgba(255,255,255,.08);color:#fff1f4;border-color:rgba(255,210,122,.35)}
-#cake{width:min(320px,86vw,max(220px,calc((100dvh - 366px)*.842)));height:auto;margin:4px 0 6px}
+#s3 .cake-tag{display:inline-flex;align-items:center;gap:8px;font:600 9.5px 'Poppins',sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#e7b04a;margin-bottom:8px;opacity:.92}
+#s3 h2{color:#fff7ee}#s3 .lead{color:#f3dce4;font-style:italic;font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;letter-spacing:.01em}
+#s3 .btn.ghost{background:rgba(255,255,255,.08);color:#fff7ee;border-color:rgba(231,176,74,.4)}
+#s3 .cakeT{font:italic 600 clamp(30px,8.6vw,40px)/1.12 'Cormorant Garamond',Georgia,serif;letter-spacing:.01em;background:linear-gradient(105deg,#fff8ec 0%,#f7d694 52%,#f4a7c0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 16px rgba(231,176,74,.24));padding:2px 6px}
+#cake{width:min(320px,86vw,max(220px,calc((100dvh - 380px)*.842)));height:auto;margin:2px 0 4px}
 .gift{--p:0;position:relative;width:170px;height:170px;margin:26px auto 4px}
 .gift::before{content:"";position:absolute;left:50%;bottom:50px;width:130px;height:130px;margin-left:-65px;border-radius:50%;background:radial-gradient(#fff3b8,transparent 70%);opacity:calc(var(--p)*.95)}
 .gb{position:absolute;left:0;right:0;bottom:0;height:104px;border-radius:10px;background:linear-gradient(#f58aa8,#d9577f);box-shadow:0 14px 30px rgba(138,42,82,.25)}
@@ -89,19 +91,39 @@ h2{font-size:36px}
 .lrule i{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
 .lrule i:last-child{transform:scaleX(-1)}
 .lrule svg{width:16px;height:16px;fill:var(--gold)}
-#loveStage{display:flex;flex-direction:column;align-items:center}
-.love{display:flex;flex-direction:column;align-items:center;font-family:'Cormorant Garamond',Georgia,serif;line-height:1;color:var(--berry)}
-.love span{display:block;opacity:0;transform:translateY(14px);will-change:opacity,transform}
-.love.go span{animation:lreveal .95s cubic-bezier(.2,.7,.2,1) forwards}
-.love .l1{font-size:30px;font-style:italic;font-weight:500;color:#8c5a6e;margin-bottom:10px}
-.love .l2,.love .l3{font-size:clamp(50px,17vw,68px);font-style:italic;font-weight:600}
-.love .l3{color:var(--rose)}
-.love.go .l1{animation-delay:.3s}.love.go .l2{animation-delay:1.4s}.love.go .l3{animation-delay:2.5s}
-.love .lrule{margin-top:30px;opacity:0}
-.love.go .lrule{animation:lfade 1s 3.6s forwards}
-.love.go .lrule svg{animation:beat 1.3s 4.4s ease-in-out infinite}
-.love-btn{margin-top:34px;opacity:0}
-.love.go~.love-btn{animation:lfade .9s 4.4s forwards}
+/* ===== VIP Seamless Floating Editorial Reveal ===== */
+#s4:has(#loveStage:not(.hide)){background:radial-gradient(circle at 50% 42%,rgba(255,252,247,.94) 0%,rgba(255,235,241,.82) 55%,rgba(255,216,228,.88) 100%)}
+#loveStage{position:relative;display:flex;flex-direction:column;align-items:center;width:100%;max-width:420px;padding:18px 16px}
+#loveStage::before{content:"";position:absolute;top:50%;left:50%;width:320px;height:320px;transform:translate(-50%,-54%);border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.85) 0%,rgba(255,236,214,.42) 48%,transparent 72%);filter:blur(10px);pointer-events:none;z-index:-1}
+
+.vip-tag{display:inline-flex;align-items:center;gap:8px;font:600 10px 'Poppins',sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#b8872f;margin-bottom:22px;opacity:0}
+.love.go .vip-tag{animation:lfade .9s .15s forwards}
+
+.love{display:flex;flex-direction:column;align-items:center;text-align:center;font-family:'Cormorant Garamond',Georgia,serif}
+.love > span{display:block;opacity:0;transform:translateY(12px);filter:blur(4px);will-change:opacity,transform,filter}
+.love.go > span{animation:vipReveal 1.1s cubic-bezier(.2,.75,.2,1) forwards}
+@keyframes vipReveal{to{opacity:1;transform:none;filter:blur(0)}}
+
+.love .l1{font-size:clamp(22px,5.8vw,27px);font-style:italic;font-weight:500;color:#8c5a6e;letter-spacing:.015em;margin-bottom:6px}
+.love .l2{font-size:clamp(26px,7vw,33px);font-style:italic;font-weight:600;line-height:1.28;color:#6e2144;max-width:320px}
+.love .l3-row{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+.love .l3{font-family:'Playfair Display','Cormorant Garamond',Georgia,serif;font-style:italic;font-size:clamp(29px,8vw,37px);font-weight:700;line-height:1.18;letter-spacing:.025em;background:linear-gradient(105deg,#7a2147 0%,#d14b76 52%,#c49035 100%);-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 .1em}
+.love .l-emo{font-size:clamp(19px,5vw,22px);line-height:1;filter:drop-shadow(0 2px 6px rgba(201,151,63,.22))}
+
+.love.go .l1{animation-delay:.3s}
+.love.go .l2{animation-delay:1.25s}
+.love.go .l3-row{animation-delay:2.25s}
+
+.love-flourish{width:170px;height:22px;margin:12px auto 0;overflow:visible}
+.love-flourish path{fill:none;stroke:url(#loveGold);stroke-width:2;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.3s 3.05s cubic-bezier(.4,0,.2,1)}
+.love.go .love-flourish path{stroke-dashoffset:0}
+
+.love .lrule{margin:18px auto 0;opacity:0;width:165px}
+.love.go .lrule{animation:lfade .9s 3.55s forwards}
+.love.go .lrule svg{animation:beat 1.4s 4.2s ease-in-out infinite}
+
+.love-btn{margin-top:26px;opacity:0}
+.love.go~.love-btn{animation:lfade .9s 4.05s forwards}
 @keyframes lreveal{to{opacity:1;transform:none}}
 @keyframes lfade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.35)}30%{transform:scale(1)}45%{transform:scale(1.2)}}
@@ -219,7 +241,7 @@ body.lock .lockbg{display:block}
 .open{line-height:1}
 .open .o1{display:block;font:700 clamp(46px,14vw,60px)/1.1 'Dancing Script','Great Vibes',cursive;background:linear-gradient(100deg,#e0587f,#f2789a 55%,#e8a24f);-webkit-background-clip:text;background-clip:text;color:transparent;padding:4px 10px}
 .open .o2{display:block;margin-top:6px;font:700 15px/1.3 'Quicksand','Poppins',sans-serif;letter-spacing:.04em;color:#e0587f}
-#s3 .cakeT{font:700 clamp(25px,7.6vw,32px)/1.25 'Quicksand','Poppins',sans-serif;letter-spacing:.02em;word-spacing:.1em;text-wrap:balance;background:linear-gradient(100deg,#ffe4ec,#ffc4d4 50%,#f6cf94);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 14px rgba(246,150,170,.35));padding:2px 4px}
+
 
 /* Smooth screen fade-out & refined transitions */
 .screen{transition:opacity .22s ease;will-change:opacity}
@@ -390,11 +412,12 @@ body.waitmode .lockbg{opacity:1}
 </section>
 
 <section class="screen" id="s3">
-  <h2 class="cakeT">Etmanni omneya 7elwa</h2>
+  <span class="cake-tag">✦ Chapter 20 · Make a Wish ✦</span>
+  <h2 class="cakeT">Close your eyes &amp; make a wish</h2>
   <canvas id="cake" width="320" height="380"></canvas>
-  <p class="lead" id="cakeMsg">Lights off, candles on 🕯️ make it count.</p>
+  <p class="lead" id="cakeMsg">The room is quiet.. light the candles when you’re ready.</p>
   <div class="cap-reveal hide" id="capReveal"><small>Your Time-Capsule Wish</small><p id="capRevealText"></p></div>
-  <button class="btn" id="light" style="margin-top:14px">Light them up</button>
+  <button class="btn" id="light" style="margin-top:14px">Light the candles 🕯️</button>
   <div class="row hide" id="cakeAct"><button class="btn" id="hold">Hold to blow</button><button class="btn ghost" id="mic">Use microphone</button></div>
 </section>
 
@@ -412,9 +435,11 @@ body.waitmode .lockbg{opacity:1}
   </div>
   <div id="loveStage" class="hide">
     <div class="love" id="love">
+      <span class="vip-tag">✦ For My Horizon ✦</span>
       <span class="l1">You have no idea</span>
-      <span class="l2">What just looking in ur eyes</span>
-      <span class="l3">undoes me 🫠️🤍️</span>
+      <span class="l2">what just looking in your eyes</span>
+      <span class="l3-row"><span class="l3">undoes me.</span><span class="l-emo" aria-hidden="true">🫠🤍</span></span>
+      <svg class="love-flourish" viewBox="0 0 200 24" aria-hidden="true"><defs><linearGradient id="loveGold" x1="0" x2="1"><stop offset="0" stop-color="#c9973f" stop-opacity="0"/><stop offset=".3" stop-color="#c9973f"/><stop offset=".7" stop-color="#e7b04a"/><stop offset="1" stop-color="#c9973f" stop-opacity="0"/></linearGradient></defs><path pathLength="1" d="M12 14 C 58 4, 142 22, 188 10"/></svg>
       <div class="lrule lr-late"><i></i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><i></i></div>
     </div>
     <button class="btn love-btn" id="toLetter">There’s more.. read this 🤍</button>
@@ -484,11 +509,27 @@ const sfxArrowHit=()=>{
   [[659.25,0,.028,1.5],[987.77,.11,.03,1.8],[1318.51,.22,.022,2.1]].forEach(([f,at,v,d])=>tone(f,d,v,at,1600,.03,'sine'));
 };
 
-/* 2) Candle Snuff: airy, dreamy wish chime (warm & gentle) */
+/* 2) Candle Breeze (while blowing) & Warm Harp Wish Chime (on snuff) */
+let windNode=null,windGain=null;
+function setBlowWind(amt){
+  try{
+    if(amt>0.02&&!windNode){
+      const a=ac(),buf=a.createBuffer(1,a.sampleRate*2,a.sampleRate),d=buf.getChannelData(0);
+      let b0=0,b1=0,b2=0;
+      for(let i=0;i<d.length;i++){const w=Math.random()*2-1;b0=0.99765*b0+w*0.099046;b1=0.96300*b1+w*0.2965164;b2=0.57000*b2+w*1.0526913;d[i]=(b0+b1+b2+w*0.1848)*0.12}
+      const src=a.createBufferSource();src.buffer=buf;src.loop=true;
+      const flt=a.createBiquadFilter();flt.type='bandpass';flt.frequency.value=420;flt.Q.value=0.9;
+      windGain=a.createGain();windGain.gain.value=0.0001;
+      src.connect(flt);flt.connect(windGain);windGain.connect(a.destination);src.start();windNode=src;
+    }
+    if(windGain&&AC){windGain.gain.setTargetAtTime(amt>0.02?amt*0.09:0.0001,AC.currentTime,0.08)}
+  }catch(e){}
+}
 const sfxCandleWish=()=>{
-  [[392.00,0,.026,2.8],[493.88,.18,.024,2.8],[587.33,.36,.022,3.0],[739.99,.56,.018,3.2]].forEach(([f,at,v,d])=>{
-    tone(f,d,v,at,850,.18,'sine');
-    tone(f*2,d*.8,v*.25,at+.04,1100,.2,'sine');
+  setBlowWind(0);
+  [[261.63,0,.028,3.2],[329.63,.16,.026,3.2],[392.00,.32,.026,3.4],[493.88,.48,.024,3.5],[587.33,.66,.022,3.8],[783.99,.86,.018,4.0]].forEach(([f,at,v,d])=>{
+    tone(f,d,v,at,780,.14,'sine');
+    tone(f*0.5,d+.3,v*.45,at,420,.25,'sine');
   });
 };
 
@@ -688,50 +729,226 @@ function drawArena(){const c=ax;c.setTransform(DPR,0,0,DPR,0,0);c.clearRect(0,0,
   if(G.fly)arrow(c,G.fly.x,G.fly.y,Math.atan2(G.fly.vy,G.fly.vx))}
 $('n2').onclick=()=>show('s3');
 
-/* 3. cake by candlelight */
+/* 3. Ultra-VIP Architectural Single-Tier Cake */
 const ck=$('cake'),kx=ck.getContext('2d');ck.width=320*DPR;ck.height=380*DPR;
 let C={go:false,t:0,lit:[0,0],rdy:0,blow:0,out:false,smoke:[],holding:false,an:null,buf:null,cal:0,floor:0,stream:null};
-$('light').onclick=()=>{C.go=true;$('light').classList.add('hide');$('cakeMsg').textContent='Hold that thought…';vibe(30)};
+const cakeBokeh=Array.from({length:14},(_,i)=>({x:22+(i*47%276),y:28+(i*67%310),r:3.5+(i%4)*3.5,p:i*1.3,gold:i%2===0}));
+$('light').onclick=()=>{C.go=true;$('light').classList.add('hide');$('cakeMsg').textContent='Take a deep breath, wish for something beautiful…';vibe(30)};
 $('hold').onpointerdown=e=>{e.preventDefault();C.holding=true};
 document.addEventListener('contextmenu',e=>{if(e.target.closest('button,.btn,canvas,.gift,label'))e.preventDefault()});
 ['pointerup','pointerleave','pointercancel'].forEach(e=>$('hold').addEventListener(e,()=>C.holding=false));
 $('mic').onclick=async()=>{$('mic').classList.add('hide');
   try{const st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}}),a=ac(),an=a.createAnalyser();
-    an.fftSize=1024;a.createMediaStreamSource(st).connect(an);Object.assign(C,{stream:st,an,buf:new Float32Array(1024),cal:0,floor:0});$('cakeMsg').textContent='Deep breath.. now blow 💨'}
+    an.fftSize=1024;a.createMediaStreamSource(st).connect(an);Object.assign(C,{stream:st,an,buf:new Float32Array(1024),cal:0,floor:0});$('cakeMsg').textContent='Softly blow towards the flames 💨'}
   catch(e){$('cakeMsg').textContent='Mic is off 🙈 hold the button to blow instead.'}};
-function flame(c,x,y,k,t,lean,ph){if(k<=.02)return;const fl=1+.08*Math.sin(t*14+ph)+.05*Math.sin(t*23+ph*2),h=30*k*fl,w=9*k;
-  let g=c.createRadialGradient(x,y-h*.4,0,x,y-h*.4,46*k);g.addColorStop(0,'rgba(255,200,100,.5)');g.addColorStop(1,'rgba(255,200,100,0)');c.fillStyle=g;c.fillRect(x-50,y-h-40,100,130);
-  c.beginPath();c.moveTo(x,y);c.bezierCurveTo(x-w*1.6,y-h*.35,x-w*.5+lean*.3,y-h*.8,x+lean,y-h);c.bezierCurveTo(x+w*.5+lean*.3,y-h*.8,x+w*1.6,y-h*.35,x,y);
-  g=c.createLinearGradient(0,y,0,y-h);g.addColorStop(0,'#ff9a3c');g.addColorStop(.6,'#ffd45c');g.addColorStop(1,'#fff6c8');c.fillStyle=g;c.fill();
-  c.fillStyle='rgba(120,160,255,.65)';c.beginPath();c.ellipse(x,y-3,w*.35,h*.14,0,0,TAU);c.fill()}
-function snuff(){C.out=true;$('hold').style.setProperty('--blow-p',0);sfxCandleWish();
-  [124,196].forEach(x=>{for(let i=0;i<6;i++)C.smoke.push({x:x+Math.random()*6-3,y:121-i*3,a:.5,r:3+Math.random()*3,v:20+Math.random()*14,ph:Math.random()*6})});
-  $('cakeMsg').textContent='Wish locked in. No take-backs.';try{if(localStorage.getItem(CAP_KEY))$('capReveal').classList.remove('hide')}catch(e){}$('cakeAct').classList.add('hide');confetti(90);
-  if(C.stream)C.stream.getTracks().forEach(tr=>tr.stop());C.an=null;setTimeout(()=>show('s4'),2600)}
+
+function flame(c,x,y,k,t,lean,ph){
+  if(k<=.02)return;
+  const fl=1+.065*Math.sin(t*13+ph)+.04*Math.sin(t*22+ph*2),h=30*k*fl,w=7.8*k;
+  let g=c.createRadialGradient(x,y-h*.45,0,x,y-h*.45,52*k);
+  g.addColorStop(0,'rgba(255,216,140,.52)');g.addColorStop(.5,'rgba(235,155,130,.15)');g.addColorStop(1,'rgba(255,200,100,0)');
+  c.fillStyle=g;c.fillRect(x-58,y-h-48,116,140);
+  c.beginPath();c.moveTo(x,y);
+  c.bezierCurveTo(x-w*1.5,y-h*.36,x-w*.46+lean*.32,y-h*.82,x+lean,y-h);
+  c.bezierCurveTo(x+w*.46+lean*.32,y-h*.82,x+w*1.5,y-h*.36,x,y);
+  g=c.createLinearGradient(0,y,0,y-h);
+  g.addColorStop(0,'#ff9d42');g.addColorStop(.55,'#ffe28a');g.addColorStop(1,'#fffef5');
+  c.fillStyle=g;c.fill();
+  c.fillStyle='rgba(150,185,255,.5)';c.beginPath();c.ellipse(x,y-2.2,w*.3,h*.13,0,0,TAU);c.fill();
+}
+
+function snuff(){
+  C.out=true;$('hold').style.setProperty('--blow-p',0);sfxCandleWish();
+  [[116,120],[204,132]].forEach(([x,y])=>{
+    for(let i=0;i<7;i++)C.smoke.push({x:x+Math.random()*4-2,y:y-i*3,a:.52,r:2.2+Math.random()*2.2,v:21+Math.random()*13,ph:Math.random()*6});
+  });
+  $('cakeMsg').textContent='Sealed in the stars. May every single word come true 🤍';
+  try{if(localStorage.getItem(CAP_KEY))$('capReveal').classList.remove('hide')}catch(e){}
+  $('cakeAct').classList.add('hide');confetti(90);
+  if(C.stream)C.stream.getTracks().forEach(tr=>tr.stop());C.an=null;setTimeout(()=>show('s4'),2800);
+}
+
 const ell=(c,x,y,rx,ry)=>{c.beginPath();c.ellipse(x,y,rx,ry,0,0,TAU);c.fill()};
-function drawCake(dt){let blowing=C.holding;
-  if(C.go){C.t+=dt;C.lit[0]=cl(C.lit[0]+dt*1.5);if(C.t>.55)C.lit[1]=cl(C.lit[1]+dt*1.5)}
-  const ready=C.lit[1]>=1;if(ready&&!C.rdy){C.rdy=1;$('cakeMsg').textContent='Make a wish 🤍 then blow.';$('cakeAct').classList.remove('hide')}
+
+function drawCake(dt){
+  let blowing=C.holding;
+  if(C.go){C.t+=dt;C.lit[0]=cl(C.lit[0]+dt*1.4);if(C.t>.5)C.lit[1]=cl(C.lit[1]+dt*1.4)}
+  const ready=C.lit[1]>=1;
+  if(ready&&!C.rdy){C.rdy=1;$('cakeMsg').textContent='Close your eyes, make a wish, then blow 🤍';$('cakeAct').classList.remove('hide')}
   if(C.an){C.an.getFloatTimeDomainData(C.buf);let s=0;for(const v of C.buf)s+=v*v;const rms=Math.sqrt(s/C.buf.length);C.cal+=dt;if(C.cal<.6)C.floor=Math.max(C.floor,rms);else if(rms>C.floor*2+.03)blowing=true}
-  if(ready&&!C.out){C.blow=cl(C.blow+(blowing?dt*1.1:-dt*.7));$('hold').style.setProperty('--blow-p',C.blow);if(C.blow>=1)snuff()}
-  const c=kx,t=clock,L=(C.lit[0]+C.lit[1])/2;c.setTransform(DPR,0,0,DPR,0,0);c.clearRect(0,0,320,380);
-  c.fillStyle='#f3e4d6';c.fillRect(152,336,16,26);ell(c,160,364,66,9);c.fillStyle='#fff6ee';ell(c,160,331,132,16);
-  c.strokeStyle='#c9973f';c.lineWidth=2;c.beginPath();c.ellipse(160,331,132,16,0,0,TAU);c.stroke();
-  [[292,34,'#e9b66e'],[282,10,'#fff7ee'],[246,36,'#f0c485'],[236,10,'#fff7ee'],[200,36,'#e9b66e']].forEach(([y,h,col])=>{c.fillStyle=col;c.fillRect(60,y,200,h);ell(c,160,y+h,100,14)});
-  c.fillStyle='#fff7ee';ell(c,160,200,100,14);
-  let g=c.createLinearGradient(60,0,260,0);g.addColorStop(0,'rgba(80,30,40,.28)');g.addColorStop(.25,'rgba(80,30,40,0)');g.addColorStop(.75,'rgba(255,255,255,0)');g.addColorStop(1,'rgba(80,30,40,.3)');c.fillStyle=g;c.fillRect(60,214,200,112);
-  [[84,194,-.5],[96,190,.2],[236,194,.5]].forEach(([x,y,r])=>{c.fillStyle='#6fae7e';c.beginPath();c.ellipse(x,y,10,4,r,0,TAU);c.fill()});
-  const berry=(x,y,r)=>{const b=c.createRadialGradient(x-r*.3,y-r*.3,1,x,y,r);b.addColorStop(0,'#ff8fa0');b.addColorStop(1,'#c92a55');c.fillStyle=b;c.beginPath();c.arc(x,y,r,0,TAU);c.fill();c.fillStyle='rgba(255,255,255,.55)';c.beginPath();c.arc(x-r*.35,y-r*.35,r*.22,0,TAU);c.fill()};
-  berry(80,199,10);berry(100,195,9);berry(222,195,9);berry(242,199,10);
-  c.fillStyle='#e7b04a';[[110,206],[214,203],[76,238],[244,272],[130,300]].forEach(([x,y])=>c.fillRect(x,y,5,4));
-  c.font="600 108px Poppins,sans-serif";c.textAlign='center';
-  [['2',124],['0',196]].forEach(([d,x])=>{g=c.createLinearGradient(0,132,0,208);g.addColorStop(0,'#ffe3ea');g.addColorStop(1,'#f38aa9');c.fillStyle=g;c.fillText(d,x,208);
-    c.strokeStyle='rgba(255,255,255,.6)';c.lineWidth=2;c.strokeText(d,x,208);c.strokeStyle='#3b2a2a';c.lineWidth=3;c.beginPath();c.moveTo(x,134);c.lineTo(x,122);c.stroke()});
-  c.fillStyle='#ffb3c6';c.beginPath();c.ellipse(160,211,13,6,0,0,TAU);c.fill();c.fillStyle='#fff';c.fillRect(148,212,24,4);c.fillStyle='#ffb3c6';c.beginPath();c.ellipse(160,218,13,6,0,0,TAU);c.fill();
-  c.globalCompositeOperation='source-atop';g=c.createRadialGradient(160,120,10,160,120,230);g.addColorStop(0,`rgba(12,6,24,${.82*(1-L)})`);g.addColorStop(1,`rgba(12,6,24,${.82-.5*L})`);c.fillStyle=g;c.fillRect(0,0,320,380);
-  c.globalCompositeOperation='lighter';g=c.createRadialGradient(160,140,0,160,140,200);g.addColorStop(0,`rgba(255,170,80,${.22*L*(1-C.blow)})`);g.addColorStop(1,'rgba(255,170,80,0)');c.fillStyle=g;c.fillRect(0,0,320,380);c.globalCompositeOperation='source-over';
-  const k=C.out?0:1-C.blow;flame(c,124,121,C.lit[0]*k,t,C.blow*12,0);flame(c,196,121,C.lit[1]*k,t,C.blow*12,1.7);
-  C.smoke=C.smoke.filter(p=>p.a>0);for(const p of C.smoke){p.y-=p.v*dt;p.x+=Math.sin(t*3+p.ph)*.3;p.a-=dt*.35;p.r+=dt*7;c.fillStyle=`rgba(230,225,255,${Math.max(0,p.a)})`;c.beginPath();c.arc(p.x,p.y,p.r,0,TAU);c.fill()}}
+  if(ready&&!C.out){C.blow=cl(C.blow+(blowing?dt*1.05:-dt*.65));$('hold').style.setProperty('--blow-p',C.blow);setBlowWind(blowing?0.45+C.blow*0.55:0);if(C.blow>=1)snuff()}
+  else setBlowWind(0);
+
+  const c=kx,t=clock,L=((C.lit[0]+C.lit[1])/2)*(C.out?0:1-C.blow*0.35);
+  $('dusk').style.setProperty('--glow',L.toFixed(2));
+  c.setTransform(DPR,0,0,DPR,0,0);c.clearRect(0,0,320,380);
+
+  /* Ambient Candlelight Bokeh */
+  for(const b of cakeBokeh){
+    const al=(0.1+0.24*L)*(0.6+0.4*Math.sin(t*1.1+b.p));
+    c.fillStyle=b.gold?`rgba(247,214,148,${al})`:`rgba(235,168,186,${al*0.75})`;
+    c.beginPath();c.arc(b.x+Math.sin(t*.4+b.p)*4,b.y+Math.cos(t*.35+b.p)*4,b.r,0,TAU);c.fill();
+  }
+
+  /* Warm radial studio backlight */
+  let g=c.createRadialGradient(160,215,12,160,215,165);
+  g.addColorStop(0,`rgba(255,218,155,${0.14+0.28*L})`);
+  g.addColorStop(0.6,`rgba(205,120,145,${0.06+0.09*L})`);
+  g.addColorStop(1,'rgba(0,0,0,0)');
+  c.fillStyle=g;c.fillRect(0,20,320,360);
+
+  /* 1. Floating Crystal / Frosted Acrylic Pedestal with Rose-Gold Rim */
+  c.fillStyle='rgba(0,0,0,.34)';ell(c,160,366,76,8);
+  /* Slender brushed gold stem */
+  g=c.createLinearGradient(153,332,167,332);
+  g.addColorStop(0,'#b5835a');g.addColorStop(.5,'#f7dfc8');g.addColorStop(1,'#9c6b46');
+  c.fillStyle=g;c.fillRect(155,332,10,30);
+  /* Base disc */
+  g=c.createLinearGradient(104,358,216,366);
+  g.addColorStop(0,'#b5835a');g.addColorStop(.5,'#f7dfc8');g.addColorStop(1,'#9c6b46');
+  c.fillStyle=g;ell(c,160,362,56,7);
+  /* Acrylic glass platter */
+  g=c.createLinearGradient(44,318,276,336);
+  g.addColorStop(0,'rgba(255,248,244,.32)');g.addColorStop(.5,'rgba(255,240,235,.55)');g.addColorStop(1,'rgba(235,205,195,.28)');
+  c.fillStyle=g;ell(c,160,328,116,14);
+  c.strokeStyle='rgba(255,255,255,.55)';c.lineWidth=1;c.beginPath();c.ellipse(160,326.5,115,13,0,0,TAU);c.stroke();
+  c.strokeStyle='#d6a374';c.lineWidth=2;c.beginPath();c.ellipse(160,329,116,14,0,0,TAU);c.stroke();
+
+  /* 2. Tall Single-Tier Architectural Cylinder (Champagne Silk & Ivory) */
+  const cTop=196,cBot=324,cRx=82,cRy=12,midY=262;
+  /* Soft contact shadow on platter */
+  c.fillStyle='rgba(60,20,35,.22)';ell(c,160,326,cRx+3,cRy+1.5);
+
+  /* Cylinder body gradient (Champagne Ivory Silk) */
+  g=c.createLinearGradient(160-cRx,0,160+cRx,0);
+  g.addColorStop(0,'#dfd0c5');
+  g.addColorStop(.22,'#fcf7f1');
+  g.addColorStop(.58,'#fffaf5');
+  g.addColorStop(.84,'#eddcd0');
+  g.addColorStop(1,'#d4bfb2');
+  c.fillStyle=g;
+  c.fillRect(160-cRx,cTop,cRx*2,cBot-cTop);
+  ell(c,160,cBot,cRx,cRy);
+
+  /* Lower Half: Architectural Vertical Fluted / Ribbed Pleats */
+  c.save();
+  c.beginPath();
+  c.moveTo(160-cRx,midY);
+  c.lineTo(160-cRx,cBot);
+  c.ellipse(160,cBot,cRx,cRy,0,Math.PI,0,true);
+  c.lineTo(160+cRx,midY);
+  c.ellipse(160,midY,cRx,cRy,0,0,Math.PI,false);
+  c.closePath();
+  c.clip();
+  const ribs=26;
+  for(let i=0;i<=ribs;i++){
+    const ang=Math.PI*(i/ribs);
+    const rx=160-Math.cos(ang)*cRx;
+    const shade=Math.sin(ang);
+    c.strokeStyle=`rgba(165,130,112,${0.18*shade})`;
+    c.lineWidth=1.4;
+    c.beginPath();c.moveTo(rx,midY-4);c.lineTo(rx,cBot+14);c.stroke();
+    c.strokeStyle=`rgba(255,255,255,${0.45*shade})`;
+    c.lineWidth=1;
+    c.beginPath();c.moveTo(rx+1.6,midY-4);c.lineTo(rx+1.6,cBot+14);c.stroke();
+  }
+  c.restore();
+
+  /* Fine Rose-Gold Architectural Band separating smooth top & fluted base */
+  c.strokeStyle='#d6a374';c.lineWidth=1.5;
+  c.beginPath();c.ellipse(160,midY,cRx,cRy,0,0.03,Math.PI-0.03);c.stroke();
+
+  /* Upper Half: Subtle Rose-Gold & Champagne Marble Vein on left side */
+  c.save();
+  c.beginPath();c.rect(160-cRx,cTop,cRx*2,midY-cTop+cRy);c.clip();
+  c.strokeStyle='rgba(205,152,118,.32)';c.lineWidth=1.6;
+  c.beginPath();c.moveTo(92,205);c.bezierCurveTo(106,222,102,240,118,258);c.stroke();
+  c.strokeStyle='rgba(226,184,135,.55)';c.lineWidth=0.9;
+  c.beginPath();c.moveTo(95,204);c.bezierCurveTo(109,221,105,239,121,257);c.stroke();
+  c.restore();
+
+  /* Sharp Razor-Edge Top Surface & Rose-Gold Rim */
+  c.fillStyle='#fffbf6';ell(c,160,cTop,cRx,cRy);
+  c.strokeStyle='#dba97a';c.lineWidth=1.8;
+  c.beginPath();c.ellipse(160,cTop,cRx,cRy,0,0,TAU);c.stroke();
+
+  /* 3. Sculptural Monoline Rose-Gold "20" Wire Topper (Centerpiece) */
+  c.save();
+  /* Topper stems inserted cleanly into cake top */
+  c.strokeStyle='#b8825a';c.lineWidth=2.2;
+  c.beginPath();c.moveTo(145,172);c.lineTo(145,195);c.moveTo(175,172);c.lineTo(175,195);c.stroke();
+  /* Metallic Rose-Gold & Champagne Chrome "20" */
+  c.font="italic 700 54px 'Playfair Display',Georgia,serif";
+  c.textAlign='center';
+  g=c.createLinearGradient(125,126,195,176);
+  g.addColorStop(0,'#fff0e2');
+  g.addColorStop(.32,'#e5b289');
+  g.addColorStop(.68,'#c68963');
+  g.addColorStop(1,'#f7dec8');
+  c.shadowColor='rgba(40,12,24,.38)';c.shadowBlur=8;c.shadowOffsetY=3;
+  c.fillStyle=g;c.fillText('20',160,174);
+  c.lineWidth=1.1;c.strokeStyle='rgba(255,248,240,.75)';c.strokeText('20',160,174);
+  c.restore();
+
+  /* 4. Minimalist Geometric Sail & Matte Champagne Pearls (Right Corner Accent) */
+  /* Translucent White Chocolate / Rice-Paper Geometric Sail with Gold Edge */
+  c.save();
+  g=c.createLinearGradient(196,174,234,198);
+  g.addColorStop(0,'rgba(255,250,245,.92)');g.addColorStop(1,'rgba(242,224,212,.85)');
+  c.fillStyle=g;
+  c.beginPath();c.moveTo(202,197);c.quadraticCurveTo(212,172,232,176);c.quadraticCurveTo(226,193,216,198);c.closePath();c.fill();
+  c.strokeStyle='#d6a374';c.lineWidth=1.2;c.stroke();
+  c.restore();
+
+  /* 3 Graduated Matte Champagne Pearls */
+  const pearl=(x,y,r)=>{
+    const p=c.createRadialGradient(x-r*.32,y-r*.32,r*.1,x,y,r);
+    p.addColorStop(0,'#ffffff');p.addColorStop(.55,'#f3dfd0');p.addColorStop(1,'#cbb09d');
+    c.fillStyle=p;c.beginPath();c.arc(x,y,r,0,TAU);c.fill();
+  };
+  pearl(195,199,4.6);pearl(204,201,3.4);pearl(187,201,2.7);
+
+  /* 5. Two Slender Asymmetric Micro-Taper Candles (Left & Right) */
+  const drawTaper=(x,topY,botY)=>{
+    /* Tiny rose-gold candle cup */
+    c.fillStyle='#d6a374';ell(c,x,botY,4.5,1.6);
+    /* Slender matte ivory candle body */
+    g=c.createLinearGradient(x-2.2,0,x+2.2,0);
+    g.addColorStop(0,'#e8dad0');g.addColorStop(.45,'#fffdf9');g.addColorStop(1,'#d5c2b6');
+    c.fillStyle=g;c.fillRect(x-2.1,topY,4.2,botY-topY);
+    /* Fine gold ring detail on candle */
+    c.fillStyle='#d6a374';c.fillRect(x-2.1,topY+10,4.2,1.5);
+    /* Wick */
+    c.strokeStyle='#2b1818';c.lineWidth=1.6;
+    c.beginPath();c.moveTo(x,topY);c.lineTo(x,topY-7);c.stroke();
+  };
+  /* Asymmetric heights for modern architectural balance */
+  drawTaper(116,128,195);
+  drawTaper(204,140,195);
+
+  /* Candlelight warmth & ambient shadow blend */
+  c.globalCompositeOperation='source-atop';
+  g=c.createRadialGradient(160,120,18,160,150,240);
+  g.addColorStop(0,`rgba(20,8,16,${0.56*(1-L)})`);
+  g.addColorStop(1,`rgba(20,8,16,${0.64-0.40*L})`);
+  c.fillStyle=g;c.fillRect(0,0,320,380);
+  c.globalCompositeOperation='lighter';
+  g=c.createRadialGradient(160,132,0,160,132,185);
+  g.addColorStop(0,`rgba(255,198,125,${0.25*L})`);
+  g.addColorStop(1,'rgba(255,198,125,0)');
+  c.fillStyle=g;c.fillRect(0,0,320,380);
+  c.globalCompositeOperation='source-over';
+
+  /* Flames & Silk Smoke */
+  const k=C.out?0:1-C.blow;
+  flame(c,116,120,C.lit[0]*k,t,C.blow*13,0);
+  flame(c,204,132,C.lit[1]*k,t,C.blow*13,1.7);
+  C.smoke=C.smoke.filter(p=>p.a>0);
+  for(const p of C.smoke){
+    p.y-=p.v*dt;p.x+=Math.sin(t*3+p.ph)*.35;p.a-=dt*.32;p.r+=dt*6.2;
+    c.fillStyle=`rgba(255,246,238,${Math.max(0,p.a)})`;c.beginPath();c.arc(p.x,p.y,p.r,0,TAU);c.fill();
+  }
+}
 
 function heartBurst(n=36){if(reduced)return;const c=$('fx'),x=c.getContext('2d'),cols=['#f58aa8','#e0587f','#e7b04a','#ffb3c6','#fff'];c.width=innerWidth;c.height=innerHeight;
   const ps=Array.from({length:n},()=>({x:c.width/2+(Math.random()-.5)*90,y:c.height*.52,vx:(Math.random()-.5)*7,vy:-Math.random()*7-2.5,s:5+Math.random()*6,a:1,p:Math.random()*TAU,c:cols[Math.random()*5|0]}));
@@ -1034,7 +1251,7 @@ $('saveCard').onclick=()=>{redrawCard(true);cv.toBlob(b=>{
 $('shareCard').onclick=()=>{redrawCard(true);cv.toBlob(b=>{const f=new File([b],'nrmeen-birthday-card.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f]}).catch(()=>{});else $('saveCard').click();redrawCard(false)},'image/png')};
 $('printCard').onclick=()=>{redrawCard(true);window.print();redrawCard(false)};
 if(WA_NUMBER)$('wa').href=`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Thank uuu, made my day 🤍')}`;else $('wa').classList.add('hide');
-$('replay').onclick=()=>{resetG();Object.assign(C,{go:false,t:0,lit:[0,0],rdy:0,blow:0,out:false,smoke:[],an:null,cal:0});$('cakeMsg').textContent='Lights off, candles on 🕯️ make it count.';
+$('replay').onclick=()=>{resetG();Object.assign(C,{go:false,t:0,lit:[0,0],rdy:0,blow:0,out:false,smoke:[],an:null,cal:0});$('cakeMsg').textContent='The room is quiet.. light the candles when you’re ready.';
   $('light').classList.remove('hide');$('cakeAct').classList.add('hide');$('mic').classList.remove('hide');
   opened=false;sl.value=0;gift.style.setProperty('--p',0);$('sliderHint').style.opacity=1;$('giftBox').classList.remove('hide','opening');$('letterStage').classList.add('hide');$('loveStage').classList.add('hide');$('love').classList.remove('go');clearTimeout(typing);show('s2')};
 
