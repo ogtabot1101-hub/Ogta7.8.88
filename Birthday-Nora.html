@@ -830,8 +830,7 @@ html[lang=ar] .mem-ribbon{font:700 12.5px 'Tajawal','Cairo',sans-serif}
 </section>
 
 <div class="secret-toast" id="secretToast" role="status" aria-live="polite"><small data-i18n="secretSmall">✦ Secret Note</small><span id="secretMsg"></span></div>
-<audio id="bgm" src="music.mp3" preload="auto"></audio>
-<audio id="bgm2" src="music.mp3" preload="auto"></audio>
+<audio id="bgm" src="music.mp3" loop preload="auto"></audio>
 
 <script>
 const AGE=20,CODE="2611",TEST_CODE="0806" /* for testing: skips the date gate */,WA_NUMBER="201559503470" /* digits only with country code, e.g. 201001234567 */,UNLOCK=new Date('2026-11-26T00:00:00+02:00');
@@ -970,183 +969,35 @@ const sfxGiftLove=()=>{
     tone(f*0.5,d+.4,v*.55,at,500,.22,'sine'); /* warm velvet bass undertone */
   });
 };
-const SONG={title:"For the First Time",artist:"Kenny Loggins"},MUSIC_VOL=.62,DUCK_VOL=.18,XFADE=4.5;
-const bgm1=$('bgm'),bgm2=$('bgm2'),mus=$('mus'),musNP=$('musNP');
-let decks=[bgm1,bgm2],activeIdx=0,xfading=false;
-const activeBgm=()=>decks[activeIdx];
-bgm1.addEventListener('error',()=>mus.classList.add('hide'));
+const SONG={title:"For the First Time",artist:"Kenny Loggins"},MUSIC_VOL=.8,DUCK_VOL=.2; /* player text / normal volume / volume while she reads the letter */
+const bgm=$('bgm'),mus=$('mus'),musNP=$('musNP');
+bgm.addEventListener('error',()=>mus.classList.add('hide'));
 $('musTitle').textContent=SONG.title;
-
-/* Ultra-VIP Web Audio Studio Mastering Chain (Dual-Deck Seamless Crossfade + Velvet Filter + Dynamic Leveler + Limiter) */
-let gain=null,deckGains=[null,null],warmFilter=null,compNode=null,cur=0,level=MUSIC_VOL,fadeRaf=0,musStarted=false,starting=false,miniT;
-
-function setupAudioChain(){
-  if(gain)return;
-  try{
-    const a=ac();
-    /* 1. Velvet Warmth Filter: تلطيف الترددات الحادة في المقاطع الصاخبة */
-    warmFilter=a.createBiquadFilter();
-    warmFilter.type='lowpass';
-    warmFilter.frequency.value=4200;
-    warmFilter.Q.value=0.6;
-
-    /* 2. Studio Compressor: موازنة المقاطع العالية والهادئة تلقائياً */
-    compNode=a.createDynamicsCompressor();
-    compNode.threshold.value=-26;
-    compNode.knee.value=24;
-    compNode.ratio.value=8;
-    compNode.attack.value=0.015;
-    compNode.release.value=0.35;
-
-    /* 3. Brickwall Limiter: سقف أمان يمنع أي قمة صوتية مفاجئة */
-    const limiter=a.createDynamicsCompressor();
-    limiter.threshold.value=-8;
-    limiter.knee.value=0;
-    limiter.ratio.value=20;
-    limiter.attack.value=0.002;
-    limiter.release.value=0.1;
-
-    /* 4. Master Gain: التحكم في مستوى الصوت العام */
-    gain=a.createGain();
-    gain.gain.value=0;
-
-    /* Dual-Deck Routing for Seamless Crossfade Loop */
-    decks.forEach((el,i)=>{
-      const src=a.createMediaElementSource(el);
-      const dg=a.createGain();
-      dg.gain.value=i===0?1:0;
-      src.connect(dg);
-      dg.connect(warmFilter);
-      deckGains[i]=dg;
-    });
-
-    warmFilter.connect(compNode);
-    compNode.connect(limiter);
-    limiter.connect(gain);
-    gain.connect(a.destination);
-  }catch(e){gain=null}
-}
-
-const setVol=v=>{
-  cur=v;
-  try{
-    if(gain&&AC){gain.gain.setTargetAtTime(v,AC.currentTime,0.06)}
-    else{
-      const aEl=decks[activeIdx],bEl=decks[1-activeIdx];
-      if(!xfading){aEl.volume=v;bEl.volume=0}
-    }
-  }catch(e){}
-};
-
-function fadeTo(to,secs){
-  cancelAnimationFrame(fadeRaf);
-  const from=cur,t0=performance.now();
-  const step=n=>{
-    const k=cl((n-t0)/(secs*1000)),e=k*k*(3-2*k);
-    setVol(from+(to-from)*e);
-    if(k<1)fadeRaf=requestAnimationFrame(step);
-  };
-  fadeRaf=requestAnimationFrame(step);
-}
-
-function musicLevel(l){
-  level=l;
-  if(warmFilter&&AC){
-    warmFilter.frequency.setTargetAtTime(l<MUSIC_VOL?1850:4200,AC.currentTime,0.8);
-  }
-  if(musStarted)fadeTo(l,l<MUSIC_VOL?2.2:2.8);
-}
-
-/* Seamless Equal-Power Crossfade Loop Engine */
-function triggerCrossfade(){
-  if(xfading||!musStarted||activeBgm().paused)return;
-  xfading=true;
-  const fromIdx=activeIdx,toIdx=1-activeIdx;
-  const fromEl=decks[fromIdx],toEl=decks[toIdx];
-  toEl.currentTime=0;
-  toEl.play().then(()=>{
-    activeIdx=toIdx;
-    syncMus();
-    const t0=performance.now(),dur=XFADE*1000;
-    const step=now=>{
-      const k=cl((now-t0)/dur);
-      /* Equal-power cosine/sine curve prevents volume dip during transition */
-      const outG=Math.cos(k*Math.PI*0.5),inG=Math.sin(k*Math.PI*0.5);
-      if(gain&&AC&&deckGains[fromIdx]&&deckGains[toIdx]){
-        deckGains[fromIdx].gain.setValueAtTime(outG,AC.currentTime);
-        deckGains[toIdx].gain.setValueAtTime(inG,AC.currentTime);
-      }else{
-        fromEl.volume=cur*outG;
-        toEl.volume=cur*inG;
-      }
-      if(k<1){
-        requestAnimationFrame(step);
-      }else{
-        fromEl.pause();
-        fromEl.currentTime=0;
-        if(gain&&AC&&deckGains[fromIdx]&&deckGains[toIdx]){
-          deckGains[fromIdx].gain.setValueAtTime(0,AC.currentTime);
-          deckGains[toIdx].gain.setValueAtTime(1,AC.currentTime);
-        }else{
-          fromEl.volume=0;
-          toEl.volume=cur;
-        }
-        xfading=false;
-      }
-    };
-    requestAnimationFrame(step);
-  }).catch(()=>{xfading=false});
-}
-
-decks.forEach((el,i)=>{
-  el.addEventListener('timeupdate',()=>{
-    if(i===activeIdx&&!xfading&&el.duration>XFADE*2.2&&(el.duration-el.currentTime)<=XFADE){
-      triggerCrossfade();
-    }
-  });
-  el.addEventListener('ended',()=>{
-    if(i===activeIdx&&!xfading){el.currentTime=0;el.play().catch(()=>{})}
-  });
-  el.addEventListener('play',syncMus);
-  el.addEventListener('pause',syncMus);
-});
-
+/* volume engine: audio.volume where it works, a WebAudio gain on iPhone/iPad (they ignore audio.volume) */
+const volOK=(()=>{try{const a=new Audio();a.volume=.5;return a.volume===.5}catch(e){return false}})();
+let gain=null,cur=0,level=MUSIC_VOL,fadeRaf=0,musStarted=false,starting=false,miniT;
+function setupGain(){if(gain||volOK)return;try{const a=ac(),src=a.createMediaElementSource(bgm);gain=a.createGain();gain.gain.value=0;src.connect(gain);gain.connect(a.destination)}catch(e){gain=null}}
+const setVol=v=>{cur=v;try{if(gain)gain.gain.value=v;else bgm.volume=v}catch(e){}};
+function fadeTo(to,secs){cancelAnimationFrame(fadeRaf);const from=cur,t0=performance.now();
+  const step=n=>{const k=cl((n-t0)/(secs*1000)),e=k*k*(3-2*k);setVol(from+(to-from)*e);if(k<1)fadeRaf=requestAnimationFrame(step)};fadeRaf=requestAnimationFrame(step)}
+function musicLevel(l){level=l;if(musStarted)fadeTo(l,l<MUSIC_VOL?2.2:2.8)}
+/* title marquee (only if the name is too long) */
 function fitTitle(){const t=$('musT'),r=t.firstElementChild,s=r.firstElementChild;r.querySelectorAll('.dup').forEach(e=>e.remove());t.classList.remove('roll');
   if(s.offsetWidth-28>t.clientWidth+1){const c=s.cloneNode(true);c.removeAttribute('id');c.classList.add('dup');c.setAttribute('aria-hidden','true');r.appendChild(c);t.classList.add('roll')}}
 function expand(ms=4000){clearTimeout(miniT);mus.classList.remove('mini');setTimeout(fitTitle,650);miniT=setTimeout(()=>mus.classList.add('mini'),ms)}
-function syncMus(){const p=activeBgm().paused;mus.classList.toggle('off',p);musNP.textContent=p?_t('paused'):_t('playing');mus.setAttribute('aria-pressed',String(!p))}
-
-function startMusic(){
-  if(musStarted||starting||bgm1.error)return;
-  starting=true;
-  setupAudioChain();
-  setVol(0);
-  activeBgm().play().then(()=>{
-    musStarted=true;
-    mus.classList.remove('hide');
-    syncMus();
-    expand(4000);
-    fadeTo(level,4);
-  }).catch(()=>{}).then(()=>{starting=false});
-}
-
-mus.onclick=()=>{
-  if(!musStarted)return;
+function syncMus(){const p=bgm.paused;mus.classList.toggle('off',p);musNP.textContent=p?_t('paused'):_t('playing');mus.setAttribute('aria-pressed',String(!p))}
+bgm.addEventListener('play',syncMus);bgm.addEventListener('pause',syncMus);
+/* starts on the first keypad tap: fade in over 4s, open the player for 4s, then shrink to the disc */
+function startMusic(){if(musStarted||starting||bgm.error)return;starting=true;setupGain();setVol(0);
+  bgm.play().then(()=>{musStarted=true;mus.classList.remove('hide');syncMus();expand(4000);fadeTo(level,4)}).catch(()=>{}).then(()=>{starting=false})}
+/* tap the small disc = expand; tap while expanded = pause / play */
+mus.onclick=()=>{if(!musStarted)return;
   if(mus.classList.contains('mini')){expand();return}
-  const el=activeBgm();
-  if(el.paused){
-    setupAudioChain();
-    setVol(0);
-    el.play().then(()=>fadeTo(level,.7)).catch(()=>{});
-  }else{
-    decks.forEach(d=>d.pause());
-  }
-  expand();
-};
-
+  if(bgm.paused){setVol(0);bgm.play().then(()=>fadeTo(level,.7)).catch(()=>{})}else bgm.pause();
+  expand()};
 if('mediaSession' in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:SONG.title,artist:SONG.artist,album:_t('album')});
-  navigator.mediaSession.setActionHandler('play',()=>{setupAudioChain();setVol(0);activeBgm().play().then(()=>fadeTo(level,.7)).catch(()=>{})});
-  navigator.mediaSession.setActionHandler('pause',()=>decks.forEach(d=>d.pause()))}catch(e){}}
+  navigator.mediaSession.setActionHandler('play',()=>{setVol(0);bgm.play().then(()=>fadeTo(level,.7)).catch(()=>{})});
+  navigator.mediaSession.setActionHandler('pause',()=>bgm.pause())}catch(e){}}
 
 /* 1. lock (opens only on her birthday; add ?preview to the URL to test) */
 const early=()=>Date.now()<UNLOCK.getTime()&&!/preview/.test(location.search);
