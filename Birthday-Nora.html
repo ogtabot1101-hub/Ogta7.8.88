@@ -13,6 +13,7 @@
 <meta name="twitter:title" content="For Nrmeen 🤍">
 <meta name="twitter:description" content="Something small made purely for you.. tap to open ✨">
 <meta name="twitter:image" content="https://ogtabot1101-hub.github.io/Ogta7.8.88/preview.png?v=2">
+<script>(function(){var ua=navigator.userAgent||'',iab=/Instagram|FBAN|FBAV|FB_IAB|FBIOS|musical_ly|TikTok|Snapchat/i.test(ua),low=(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<=3,on=/[?&]lite=1/.test(location.search),off=/[?&]lite=0/.test(location.search);window.__LITE=!off&&(iab||low||on);if(window.__LITE)document.documentElement.classList.add('lite')})();</script>
 <script>(function(){var l='';try{var m=location.search.match(/[?&]lang=(en|ar)/);l=m?m[1]:(localStorage.getItem('nora_lang')||'')}catch(e){}if(l!=='en'&&l!=='ar')l='en';var d=document.documentElement;d.lang=l;d.dir=l==='ar'?'rtl':'ltr';window.__LANG=l})();</script>
 <meta name="theme-color" content="#ffe3ec"><meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎂</text></svg>">
@@ -915,6 +916,18 @@ html[lang] .wait{will-change:auto;backdrop-filter:none;-webkit-backdrop-filter:n
 .card-tilt.holo .card-holo{opacity:.55}
 </style>
 <script>document.documentElement.classList.add("booting")</script>
+<style id="lite-css">
+/* LITE MODE: only active inside Instagram/in-app browsers or weak phones */
+html.lite *,html.lite *::before,html.lite *::after{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html.lite body{background-attachment:scroll!important}
+html.lite #amb,html.lite .gold-dust,html.lite #sweep,html.lite .card-foil,html.lite .card-holo,html.lite .w-sheen{display:none!important}
+html.lite .letter{background:linear-gradient(180deg,#fffdf8,#fbf3e6)!important}
+html.lite .frt,html.lite .wdate,html.lite .gift-title .gt-main,html.lite .bd2 .g,html.lite .nm{animation:none!important}
+html.lite #wOpen,html.lite .wait.final .cd2 .wt:last-child{animation:none!important}
+html.lite .w-knob{filter:none!important}
+html.lite #sw .w-petals i:nth-child(n+4){display:none!important}
+html.lite .bk:nth-child(n+4){display:none!important}
+</style>
 </head><body class="lock">
 <canvas id="amb" aria-hidden="true"></canvas>
 <div id="boot" role="status" aria-live="polite"><div class="bw"><div class="bheart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div><div class="bt" id="bootT">Getting something ready…</div><div class="bl"><i></i></div></div></div>
@@ -1089,7 +1102,7 @@ html[lang] .wait{will-change:auto;backdrop-filter:none;-webkit-backdrop-filter:n
 </section>
 
 <div class="secret-toast" id="secretToast" role="status" aria-live="polite"><small data-i18n="secretSmall">✦ Secret Note</small><span id="secretMsg"></span></div>
-<audio id="bgm" src="music.mp3" loop preload="auto"></audio>
+<audio id="bgm" src="music.mp3" loop preload="metadata"></audio>
 
 <script>
 const AGE=20,CODE="2611",TEST_CODE="0806" /* for testing: skips the date gate */,WA_NUMBER="201559503470" /* digits only with country code, e.g. 201001234567 */,UNLOCK=new Date('2026-11-26T00:00:00+02:00');
@@ -1168,7 +1181,7 @@ ar:[`قبل أي حاجة، بتمنى السنة الجديدة دي تجيبل
 `المهم، يارب تكون سنة سعيدة عليكي بجد — تحققي فيها كل اللي بتتمنيه، وتعيشي أيام حلوة تفرح قلبك من جوه.`,
 `خليكي دايماً جميلة ولطيفة كده زي ما إنتي 🤍`]};
 
-const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,DPR=Math.min(devicePixelRatio||1,2);
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,DPR=Math.min(devicePixelRatio||1,window.__LITE?1.5:2);
 ['600 20px Poppins','500 20px Poppins',"italic 600 20px 'Cormorant Garamond'",'700 20px Amiri','700 20px Cairo','500 20px Tajawal','700 20px Tajawal'].forEach(f=>document.fonts&&document.fonts.load(f));
 if(document.fonts){document.fonts.load("700 40px 'Dancing Script'",'Happy Birthday, Nora');document.fonts.load("italic 700 40px 'Playfair Display'",'Nrmeen');document.fonts.load("italic 600 40px 'Cormorant Garamond'",'Made this for u');document.fonts.load("700 30px Quicksand",'3eedek sa3eed');document.fonts.load("60px 'Mrs Saint Delafield'",'Ziyad');document.fonts.load("700 40px Amiri",'كل سنة وإنتي طيبة يا نورا');document.fonts.load("700 40px Cairo",'عملت الحاجة دي عشانك يا نرمين');document.fonts.load("700 40px 'Aref Ruqaa'",'زياد')}
 let scene='s1',clock=0;
@@ -2377,7 +2390,7 @@ function boxMelody(){const A=AUD();if(!A)return 0;const out=boxOut(A.a,A.m);let 
 const cv=G('vfx'),cx=cv.getContext('2d');let W=0,H=0,D=1,P=[],run=false,last=0;
 const PAL={gold:['#fff3c4','#f7cf68','#e7b04a','#ffffff'],rose:['#ffd0de','#f58aa8','#e0587f','#ffffff'],lilac:['#e6dcff','#b79af0','#ffffff','#f7cf68']};
 const PETAL=['#f58aa8','#ffc2d4','#e0587f','#ffd9e3','#f7cf68'];
-function size(){D=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=Math.round(W*D);cv.height=Math.round(H*D)}
+function size(){D=Math.min(devicePixelRatio||1,window.__LITE?1.5:2);W=innerWidth;H=innerHeight;cv.width=Math.round(W*D);cv.height=Math.round(H*D)}
 addEventListener('resize',()=>{if(run)size()});
 function add(p){p.t=0;p.dl=p.dl||0;P.push(p);if(!run){size();run=true;last=performance.now();requestAnimationFrame(frame)}}
 function star(c,x,y,r){c.beginPath();for(let i=0;i<8;i++){const a=i*Math.PI/4,rr=i%2?r*.28:r;c.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr)}c.closePath();c.fill()}
@@ -2490,10 +2503,10 @@ if(typeof _show==='function')window.show=function(id){const cur=document.querySe
   addEventListener('deviceorientation',e=>{if(e.gamma==null||e.beta==null)return;tx=clamp(e.gamma/30,-1,1);ty=clamp((e.beta-45)/30,-1,1)},{passive:true});
   if(RM)return;
   (function tick(ms){requestAnimationFrame(tick);
-    if(document.hidden)return;
+    if(document.hidden||window.__LITE)return;
     px+=(tx-px)*.06;py+=(ty-py)*.06;
     const sc=scene;if(sc==='s2'||sc==='s3'){if(!cleared){ax.clearRect(0,0,AW,AH);cleared=true}return}
-    cleared=false;draw(ms/1000)})(0);
+    cleared=false;if(ms-(window.__ld||0)>33){window.__ld=ms;draw(ms/1000)}})(0);
 })();
 })();
 
