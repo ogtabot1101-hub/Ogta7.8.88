@@ -2129,7 +2129,7 @@ function drawCard(c,w,h,photo,exporting=false){
   {
     const ARS=LANG==='ar';if(ARS)c.direction='ltr';
     const SF=ARS?'700 24px Tajawal,Cairo,sans-serif':"italic 600 26px 'Cormorant Garamond',Georgia,serif";
-    const SIG=!!T.sig,secTxt=ARS?'معمولة عشانك بكل حب':(SIG?'secretly yours,':'secretly yours'),metaTxt='  ·  26.11  ·  Ogta7.8.88',spMeta=2.2;
+    const SIG=!!T.sig&&!ARS,secTxt=ARS?'معمولة عشانك بكل حب':(SIG?'secretly yours,':'secretly yours'),metaTxt='  ·  26.11  ·  Ogta7.8.88',spMeta=2.2;
     const sigTxt=SIG?_t('sign'):'',SGF=ARS?"700 40px 'Aref Ruqaa',Amiri,serif":"400 66px 'Mrs Saint Delafield','Great Vibes','Snell Roundhand',cursive";
     c.font=SF;const wSec=c.measureText(secTxt).width;
     let wSig=0;if(SIG){c.font=SGF;wSig=c.measureText(sigTxt).width}
