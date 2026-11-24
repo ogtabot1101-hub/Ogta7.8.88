@@ -928,6 +928,68 @@ html.lite .w-knob{filter:none!important}
 html.lite #sw .w-petals i:nth-child(n+4){display:none!important}
 html.lite .bk:nth-child(n+4){display:none!important}
 </style>
+<style id="whisper-css">
+/* secret-seal whisper: reserves its space (no layout shift), fades in once progress >= 60% */
+html[lang] .whisper{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px auto 0;max-width:330px;opacity:0;transform:translateY(5px);transition:opacity 1.4s ease,transform 1.4s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+html[lang] .whisper.on{opacity:1;transform:none}
+html[lang] .wh-seal{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 32% 28%,#ff9ab8,#d9577f 50%,#9e2b58);box-shadow:0 0 0 1.5px rgba(255,253,249,.95),0 0 0 2.5px rgba(185,138,54,.55),0 2px 6px rgba(138,42,82,.28)}
+html[lang] .wh-seal svg{width:9px;height:9px;fill:#fffdf8}
+html[lang] .wh-tx{color:rgba(150,108,40,.9);line-height:1.55;letter-spacing:.01em}
+html[lang=ar] .wh-tx{font:600 13px/1.7 'Tajawal','Cairo',sans-serif}
+html[lang=en] .wh-tx{font:500 11.5px/1.6 'Poppins','Quicksand',sans-serif;letter-spacing:.02em}
+@media (prefers-reduced-motion:reduce){html[lang] .whisper{transition:opacity .4s ease;transform:none}}
+</style>
+<style id="wait-v2-css">
+/* 20 hearts progress (one per year) */
+html[lang] .w-hearts{--hm:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");display:flex;gap:3px;justify-content:center;max-width:300px;margin:2px auto 16px;direction:ltr}
+html[lang] .w-hearts i{display:block;flex:1 1 0;min-width:0;max-width:15px;aspect-ratio:1;background:rgba(217,87,127,.2);-webkit-mask:var(--hm) center/contain no-repeat;mask:var(--hm) center/contain no-repeat}
+html[lang] .w-hearts i.on{background:linear-gradient(135deg,#f58aa8,#e0587f)}
+html[lang] .w-hearts i.cur{background:linear-gradient(90deg,#e0587f var(--f,0%),rgba(217,87,127,.2) var(--f,0%));animation:whBeat 1.4s ease-in-out infinite}
+@keyframes whBeat{50%{transform:scale(1.28)}}
+/* seconds ring: drains once a minute */
+html[lang] .wring{position:absolute;inset:0;z-index:2;border-radius:inherit;padding:1.5px;pointer-events:none;background:conic-gradient(#e7b04a var(--p,100%),transparent 0);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);mask-composite:exclude}
+/* last 48h: gold hairlines */
+html[lang] .wait.close .wt{border-color:rgba(231,176,74,.7)}
+/* the secret hint is now the only line under the clock */
+html[lang=en] .wh-tx{font:500 12.5px/1.6 'Poppins','Quicksand',sans-serif;color:rgba(140,98,32,.95)}
+html[lang=ar] .wh-tx{font:700 14px/1.7 'Tajawal','Cairo',sans-serif;color:rgba(140,98,32,.95)}
+html[lang] .wh-seal{animation:whBeat 2.4s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){html[lang] .w-hearts i.cur,html[lang] .wh-seal{animation:none}}
+html.lite .w-hearts i.cur,html.lite .wh-seal{animation:none!important}
+</style>
+<style id="wait-v3-css">
+html[lang] .cd2{display:none}
+html[lang] .w-glass{display:flex;flex-direction:column;align-items:center;margin:4px auto 12px}
+html[lang] .hg{width:30px;height:44px;overflow:visible;display:block}
+html[lang] .hg-top,html[lang] .hg-bot{transform-box:fill-box;transform-origin:50% 100%;transition:transform 1.2s ease}
+html[lang] .hg-top{transform:scaleY(var(--t,.3))}
+html[lang] .hg-bot{transform:scaleY(var(--b,.7))}
+html[lang] .hg-stream{stroke-dasharray:1.5 2.5;animation:hgFall .7s linear infinite}
+html[lang] .hg.dry .hg-stream{display:none}
+@keyframes hgFall{to{stroke-dashoffset:-4}}
+html[lang] .wait.near .hg{animation:hgTurn 1.3s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes hgTurn{from{transform:rotate(180deg)}to{transform:none}}
+html[lang] .wmsg{margin:4px 0 0;font:500 11px/1.3 'Quicksand','Poppins',sans-serif;letter-spacing:.04em;color:rgba(140,90,110,.72)}
+html[lang=ar] .wmsg{font:600 12px/1.4 'Tajawal','Cairo',sans-serif;letter-spacing:0}
+html[lang] .wmini{display:none;margin-top:8px;font:700 24px/1 'Poppins',sans-serif;letter-spacing:.06em;color:var(--berry);font-variant-numeric:tabular-nums;direction:ltr}
+html[lang] .wait.near .wmini{display:block;animation:wmIn .8s ease both}
+@keyframes wmIn{from{opacity:0;transform:translateY(6px)}}
+html[lang] .wait.soon .wmini{color:#c9973f}
+html[lang] .wait.final .wmini{animation:wmBeat 1s ease-in-out infinite}
+@keyframes wmBeat{50%{transform:scale(1.12)}}
+html[lang] .wait.ready .wmini{display:none}
+@media (prefers-reduced-motion:reduce){html[lang] .hg-stream,html[lang] .wait.near .hg,html[lang] .wait.final .wmini{animation:none}}
+html.lite .hg-stream,html.lite .wait.near .hg,html.lite .wait.final .wmini{animation:none!important}
+</style>
+<style id="wait-freeze-css">
+/* WAITING SCREEN: frozen background (balloons, bokeh, bunting, petals, gold dust, aurora).
+   Animations are only PAUSED, so they hold a nice mid-frame and resume on the lock screen. */
+body.waitmode .lockbg i,body.waitmode .lockbg svg,
+body.waitmode .gold-dust i,
+body.waitmode #sw .w-petals i,
+body.waitmode #sw .w-aurora i{animation-play-state:paused!important;will-change:auto!important}
+body.waitmode .gold-dust{transform:none!important}
+</style>
 </head><body class="lock">
 <canvas id="amb" aria-hidden="true"></canvas>
 <div id="boot" role="status" aria-live="polite"><div class="bw"><div class="bheart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div><div class="bt" id="bootT">Getting something ready…</div><div class="bl"><i></i></div></div></div>
@@ -979,17 +1041,14 @@ html.lite .bk:nth-child(n+4){display:none!important}
     <p class="wday" id="wDay">Thursday · 12:00 AM</p>
     <p class="frs" id="wRot">Lessa shwaya.. bas el wa2t bey3addi 😄</p>
     <div class="lrule"><i></i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><i></i></div>
-    <div class="w-prog">
-      <div class="w-prog-top"><span data-i18n="prog">Preparing your day...</span><b id="wPct">0%</b></div>
-      <div class="w-bar-wrap"><div class="w-bar"><div class="w-bar-fill" id="wFill"></div></div><span class="w-knob" id="wKnob" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span></div>
-    </div>
+    <div class="w-glass"><svg class="hg dry" id="wHg" viewBox="0 0 32 46" aria-hidden="true"><defs><clipPath id="hgT"><path d="M6 6H26C26 15 18 20 16 23C14 20 6 15 6 6Z"/></clipPath><clipPath id="hgB"><path d="M16 23C18 26 26 31 26 40H6C6 31 14 26 16 23Z"/></clipPath><linearGradient id="hgS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7d694"/><stop offset="1" stop-color="#e0a24a"/></linearGradient></defs><path d="M6 6H26C26 15 18 20 16 23C18 26 26 31 26 40H6C6 31 14 26 16 23C14 20 6 15 6 6Z" fill="rgba(255,255,255,.6)"/><g clip-path="url(#hgT)"><rect class="hg-top" x="6" y="6" width="20" height="17" fill="url(#hgS)"/></g><g clip-path="url(#hgB)"><rect class="hg-bot" x="6" y="23" width="20" height="17" fill="url(#hgS)"/></g><path class="hg-stream" d="M16 23V39" stroke="#e0a24a" stroke-width="1" stroke-linecap="round" fill="none"/><path d="M6 6C6 15 14 20 16 23C14 26 6 31 6 40M26 6C26 15 18 20 16 23C18 26 26 31 26 40" fill="none" stroke="#b98a36" stroke-width="1.2" stroke-linecap="round"/><rect x="3" y="3" width="26" height="3.4" rx="1.7" fill="#b98a36"/><rect x="3" y="39.6" width="26" height="3.4" rx="1.7" fill="#b98a36"/></svg><div class="wmini" id="wMini" role="timer"></div><p class="wmsg" id="wMsg"></p></div>
     <div class="cd2" role="timer" aria-label="Time left" data-i18n-aria="timer">
       <div class="wt"><b id="wD">0</b><small data-i18n="days">days</small></div>
       <div class="wt"><b id="wH">00</b><small data-i18n="hours">hours</small></div>
       <div class="wt"><b id="wM">00</b><small data-i18n="min">min</small></div>
-      <div class="wt"><b id="wS">00</b><small data-i18n="sec">sec</small></div>
+      <div class="wt"><b id="wS">00</b><small data-i18n="sec">sec</small><i class="wring" id="wRing"></i></div>
     </div>
-    <p class="wnote" data-i18n="wnote">Good things take a little patience. Come back when the clock hits zero.. and bring a wish ready </p>
+    <p class="whisper" id="wWhisper" aria-live="polite"><span class="wh-seal" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span><span class="wh-tx" data-i18n="wWhisper">It's not just a heart.. there's a small secret above the letter 🤍</span></p>
     <div class="cap-box" id="capBox">
       <div class="cap-head"><span data-i18n="capHead">Time Capsule · Wish for 20</span><small id="capUnl" data-i18n="capUnl" style="color:#a56b82;font-weight:600">Unlocks Nov 26</small></div>
       <div class="cap-row" id="capForm">
@@ -1001,7 +1060,6 @@ html.lite .bk:nth-child(n+4){display:none!important}
         <button class="cap-edit" id="capEdit" data-i18n="capEdit" type="button">Edit</button>
       </div>
     </div>
-    <p class="nowline"><span data-i18n="now">Right now: </span><span id="wNow"></span></p>
     <div class="row sm">
       <button class="btn ghost" id="wBack" data-i18n="wBack">Back</button>
       <button class="btn" id="wRemind" data-i18n="remind">Remind me 🔔</button>
@@ -1119,6 +1177,7 @@ en:{
  wEyeLoad:`CHAPTER 20 · LOADING`,wEyeNear:`LESS THAN 24 HOURS`,wEyeSoon:`ALMOST TIME · UNDER 1 HOUR`,wPriv:`Private edition · for Nrmeen`,wr2:`Every little detail here was picked on purpose.`,wr3:`Worth the wait, I promise 🤍`,wr4:`The best part is saved for last ✨`,wEyeGo:`IT'S TIME · CHAPTER 20`,frs:`Lessa shwaya.. bas el wa2t bey3addi 😄️`,prog:`Preparing your day...`,
  timer:`Time left`,days:`days`,hours:`hours`,min:`min`,sec:`sec`,
  wnote:`Good things take a little patience. Come back when the clock hits zero.. and bring a wish ready`,
+ wWhisper:`It's not just a heart.. there's a small secret above the letter 🤍`,
  capHead:`Time Capsule · Wish for 20`,capUnl:`Unlocks Nov 26`,capPh:`Write a secret wish for your 20th...`,capSave:`Lock`,
  capSaved:`Wish locked in capsule for Nov 26`,capEdit:`Edit`,now:`Right now: `,
  wBack:`Back`,remind:`Remind me 🔔`,wOpen:`Open your surprise`,opening:`Opening…`,
@@ -1147,6 +1206,7 @@ ar:{
  wEyeLoad:`سنة 20 · بتحمل...`,wEyeNear:`أقل من 24 ساعة`,wEyeSoon:`قربنا خلاص · أقل من ساعة`,wPriv:`نسخة خاصة · لنرمين`,wr2:`كل تفصيلة هنا متختارة عن قصد وبحب.`,wr3:`وعد، هتستاهل الانتظار 🤍`,wr4:`أحلى جزء سايبه للآخر ✨`,wEyeGo:`جه الوقت · سنة 20 🎉`,frs:`لسه شوية.. بس الوقت بيعدي بسرعة 😄`,prog:`بنجهز ليومك الحلو...`,
  timer:`الوقت المتبقي`,days:`يوم`,hours:`ساعة`,min:`دقيقة`,sec:`ثانية`,
  wnote:`الحاجات الحلوة بتحب الصبر شوية. ارجعي هنا أول ما العداد يوصل صفر.. وجهزي أمنية حلوة تتمنيها`,
+ wWhisper:`القلب مش للزينة.. في سر صغير فوق الجواب 🤍`,
  capHead:`كبسولة الزمن · أمنية الـ 20`,capUnl:`هتتفتح 26 نوفمبر`,capPh:`اكتبي أمنية سرية لسنتك الـ 20...`,capSave:`اقفليها`,
  capSaved:`أمنيتك اتحفظت في الكبسولة ليوم 26 نوفمبر 🤍`,capEdit:`تعديل`,now:`الوقت دلوقتي: `,
  wBack:`رجوع`,remind:`فكرني في الميعاد 🔔`,wOpen:`افتحي مفاجأتك`,opening:`بنفتح النتيجة...`,
@@ -1299,12 +1359,20 @@ function setWaitDate(){
     $('wDay').textContent=UNLOCK.toLocaleDateString('en-GB',{weekday:'long',timeZone:'Africa/Cairo'})+' · '+UNLOCK.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'Africa/Cairo'})}
 }
 const START_WAIT=new Date(2026,10,17).getTime();
+let hgKey='';
+function wGlass(df,z){const g=$('wHg');if(!g)return;let t=z?0:(df<864e5?df/864e5:df/(UNLOCK.getTime()-START_WAIT));if(!z)t=Math.max(.05,Math.min(1,t));const k=t.toFixed(3)+z;if(k===hgKey)return;hgKey=k;g.style.setProperty('--t',t.toFixed(3));g.style.setProperty('--b',(1-t).toFixed(3));g.classList.toggle('dry',z)}
+function wMsgUpdate(df,z){const ar=LANG==='ar';let m;
+  if(z)m=ar?'جاهزة.. افتحي 🤍':'It’s ready.. open it 🤍';
+  else if(df<36e5)m=ar?'دقايق وتفتح ✨':'Just minutes now ✨';
+  else if(df<864e5)m=ar?'قربنا خلاص 🤍':'Almost there 🤍';
+  else{const d=Math.ceil(df/864e5);m=d<=2?(ar?'باقي أقل من يومين 🤍':'Less than 2 days to go 🤍'):(ar?'باقي '+d+' أيام 🤍':d+' days to go 🤍')}
+  const el=$('wMsg');if(el&&el.textContent!==m)el.textContent=m;
+  const mi=$('wMini');if(mi&&!z&&df<864e5){const t=Math.floor(df/1e3),x=[Math.floor(t/3600),Math.floor(t/60)%60,t%60].map(n=>String(n).padStart(2,'0')).join(':');if(mi.textContent!==x)mi.textContent=x}}
 function wTick(){const now=Date.now(),df=UNLOCK-now,z=df<=0,t=Math.max(0,df),v=[Math.floor(t/864e5),Math.floor(t/36e5)%24,Math.floor(t/6e4)%60,Math.floor(t/1e3)%60];
   ['wD','wH','wM','wS'].forEach((id,i)=>{const x=i?String(v[i]).padStart(2,'0'):String(v[i]);const el=$(id);if(el.textContent!==x){const had=el.textContent!=='0'&&el.textContent!=='00';el.textContent=x;if(had){const tl=el.parentNode;tl.classList.remove('flip');void tl.offsetWidth;tl.classList.add('flip')}}});
   const pct=z?100:cl((now-START_WAIT)/(UNLOCK.getTime()-START_WAIT),0.08,0.999)*100;
-  $('wPct').textContent=pct.toFixed(1)+'%';$('wFill').style.width=pct.toFixed(1)+'%';{const kn=$('wKnob');if(kn)kn.style.setProperty('inset-inline-start',pct.toFixed(1)+'%')}
-  $('wNow').textContent=new Date().toLocaleString(LANG==='ar'?'ar-EG-u-nu-latn':'en-US',{weekday:'short',day:'numeric',month:'short',hour:'numeric',minute:'2-digit',second:'2-digit'});
-  $('wEye').textContent=z?_t('wEyeGo'):(df<36e5?_t('wEyeSoon'):(df<864e5?_t('wEyeNear'):_t('wEyeLoad')));{const wc=$('waitCard');if(wc){wc.classList.toggle('near',!z&&df<864e5);wc.classList.toggle('soon',!z&&df<36e5);wc.classList.toggle('final',!z&&df<1e4);wc.classList.toggle('ready',z)}if(!z&&df<1e4)vibe(12)}
+  {const wh=$('wWhisper');if(wh)wh.classList.toggle('on',pct>=60)}wGlass(df,z);wMsgUpdate(df,z);
+    $('wEye').textContent=z?_t('wEyeGo'):(df<36e5?_t('wEyeSoon'):(df<864e5?_t('wEyeNear'):_t('wEyeLoad')));{const wc=$('waitCard');if(wc){wc.classList.toggle('near',!z&&df<864e5);wc.classList.toggle('close',!z&&df<1728e5);wc.classList.toggle('soon',!z&&df<36e5);wc.classList.toggle('final',!z&&df<1e4);wc.classList.toggle('ready',z)}if(!z&&df<1e4)vibe(12)}
   $('wOpen').classList.toggle('hide',!z);$('wRemind').classList.toggle('hide',z)}
 setInterval(()=>{if(scene==='sw')wTick()},1000);
 $('wBack').onclick=()=>show('s1');$('wOpen').onclick=()=>show('s2');
@@ -2481,7 +2549,7 @@ if(typeof _show==='function')window.show=function(id){const cur=document.querySe
 
 /* ---------- ambient bokeh + parallax ---------- */
 (function(){
-  const am=G('amb'),ax=am.getContext('2d'),GD=document.querySelector('.gold-dust'),SC=.5;let AW=0,AH=0,cleared=false,tx=0,ty=0,px=0,py=0;
+  const am=G('amb'),ax=am.getContext('2d'),GD=document.querySelector('.gold-dust'),SC=.5;let AW=0,AH=0,cleared=false,frozen=false,tx=0,ty=0,px=0,py=0;
   const asz=()=>{AW=Math.ceil(innerWidth*SC);AH=Math.ceil(innerHeight*SC);am.width=AW;am.height=AH;if(RM)draw(0)};
   const COLS=[[245,138,168],[231,176,74],[183,154,240],[255,209,222]];
   const orbs=Array.from({length:9},(_,i)=>({x:R(),y:R(),r:(24+R()*52)*SC,d:.25+R()*.75,ph:R()*6.28,sp:.05+R()*.07,c:COLS[i%4].join(','),a:.1+R()*.1}));
@@ -2505,8 +2573,10 @@ if(typeof _show==='function')window.show=function(id){const cur=document.querySe
   (function tick(ms){requestAnimationFrame(tick);
     if(document.hidden||window.__LITE)return;
     px+=(tx-px)*.06;py+=(ty-py)*.06;
-    const sc=scene;if(sc==='s2'||sc==='s3'){if(!cleared){ax.clearRect(0,0,AW,AH);cleared=true}return}
-    cleared=false;if(ms-(window.__ld||0)>33){window.__ld=ms;draw(ms/1000)}})(0);
+    const sc=scene;if(sc==='s2'||sc==='s3'){if(!cleared){ax.clearRect(0,0,AW,AH);cleared=true}frozen=false;return}
+    /* waiting screen: paint the ambient bokeh ONCE, then stop redrawing */
+    if(sc==='sw'){if(!frozen){draw(ms/1000);frozen=true}return}
+    frozen=false;cleared=false;if(ms-(window.__ld||0)>33){window.__ld=ms;draw(ms/1000)}})(0);
 })();
 })();
 
